@@ -20,12 +20,12 @@ public class MemberController {
     @Autowired
     MemberService memberService;
 
+    // 회원가입
     @GetMapping("/members/new")
     public String createMember(Model model) {
         model.addAttribute("memberForm", new MemberForm());
         return "members/createMemberForm";
     }
-
     @PostMapping("/members/new")
     public String create(@Valid MemberForm form, BindingResult result) {
 
@@ -45,15 +45,14 @@ public class MemberController {
         return "redirect:/";
     }
 
+    // 회원 조회 및 수정
     @GetMapping("/members")
-    public String list(Model model) {
-        List<Member> findMember = memberService.findAll();
+    public String memberList(Model model) {
+        List<Member> findMember = memberService.findStudentList();
         model.addAttribute("members", findMember);
 
         return "members/memberList";
     }
-
-
     @GetMapping("member/{userId}/edit")
     public String updateMemberForm(@PathVariable("userId") String userId, Model model) {
         Member findMember = memberService.findOne(userId);
@@ -71,10 +70,38 @@ public class MemberController {
 
         return "members/updateMemberForm";
     }
-
     @PostMapping(value = "/members/{userId}/edit")
-    public String updateItem(@ModelAttribute("form") MemberForm form) {
+    public String updateMember(@ModelAttribute("form") MemberForm form) {
         memberService.updateUser(form.getUserId(), form.getUserName(), form.getAge(), form.getGrade(), form.getCity(), form.getStreet(), form.getZipcode());
         return "redirect:/members";
+    }
+
+    // 교사 등록
+    @GetMapping("/members/teacher/new")
+    public String createTeacher(Model model) {
+        List<Member> findMember = memberService.findStudentList();
+        model.addAttribute("teacherForm", new MemberForm())
+                .addAttribute("members", findMember);
+        return "members/createTeacherForm";
+    }
+    @PostMapping(value = "/members/teacher/new/{userId}")
+    public String updateUserTypeTeacher(@ModelAttribute("form") MemberForm form) {
+        memberService.updateUserType(form.getUserId());
+        return "redirect:/";
+    }
+
+    // 교사 조회 및 자격 박탈
+    @GetMapping("/members/teacher")
+    public String teacherList(Model model) {
+        List<Member> findTeacher = memberService.findTeacherCodeList();
+        model.addAttribute("members", findTeacher);
+
+        return "members/teacherList";
+    }
+
+    @PostMapping("/members/teacher/{userId}/cancel")
+    public String cancelTeacher(@PathVariable("userId") String userId) {
+        memberService.updateUserType(userId);
+        return "redirect:/members/teacherList";
     }
 }

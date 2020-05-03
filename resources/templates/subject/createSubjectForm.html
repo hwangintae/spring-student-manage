@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<style>
+    .fieldError {
+        border-color: #bd2130;
+    }
+</style>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <form role="form" action="/subject/new" th:object="${subjectForm}"
+          method="post">
+        <div class="form-group">
+            <label th:for="yearMonth">연도</label>
+            <input type="month" value="2020-03" max="9999-12" th:field="*{yearMonth}" class="form-control"
+                >
+        </div>
+        <div class="form-group">
+            <label th:for="subjectName">과목명</label>
+            <input type="text" th:field="*{subjectName}" class="form-control"
+                   placeholder="과목명을 입력하세요">
+        </div>
+        <div class="form-group">
+            <label th:for="teacherCode">선생코드</label>
+            <input type="text" list="teacherList" class="form-control">
+            <datalist id="teacherList" th:each="code : ${teacherCodeList}">
+                <option value="${teacherCodes}"></option>
+            </datalist>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br/>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+</html>

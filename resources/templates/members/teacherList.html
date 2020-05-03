@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>이름</th>
+                <th>나이</th>
+                <th>userType</th>
+                <th>도시</th>
+                <th>주소</th>
+                <th>우편번호</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="member : ${members}">
+                <td th:text="${member.userId}"></td>
+                <td th:text="${member.userName}"></td>
+                <td th:text="${member.age}"></td>
+                <td th:text="${member.userType}"></td>
+                <td th:text="${member.address?.city}"></td>
+                <td th:text="${member.address?.street}"></td>
+                <td th:text="${member.address?.zipcode}"></td>
+                <td>
+                    <a th:if="${member.userType.name() == 'TEACHER'}" href="#"
+                       th:href="'javascript:cancel('+${member.userId}+')'"
+                       class="btn btn-danger">CANCEL</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+<script>
+    function cancel(id) {
+        var form = document.createElement("form");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", "/members/teacher/" + id + "/cancel");
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
+</html>

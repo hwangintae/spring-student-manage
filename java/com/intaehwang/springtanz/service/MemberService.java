@@ -2,6 +2,7 @@ package com.intaehwang.springtanz.service;
 
 import com.intaehwang.springtanz.domain.Address;
 import com.intaehwang.springtanz.domain.Member;
+import com.intaehwang.springtanz.domain.UserTypeName;
 import com.intaehwang.springtanz.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional(readOnly = true)
@@ -42,6 +44,12 @@ public class MemberService {
     public List<Member> findByUserName(String userName) {
         return memberRepository.findByUserName(userName);
     }
+    public List<Member> findTeacherCodeList() {
+        return memberRepository.findTeacherCodeList();
+    }
+    public List<Member> findStudentList() {
+        return memberRepository.findStudentList();
+    }
 
 
     // 회원 수정
@@ -58,4 +66,28 @@ public class MemberService {
         member.setAddress(address);
     }
 
+    @Transactional
+    public void updateUserType(String userId) {
+        Member member = memberRepository.findOne(userId);
+
+        if (member.getUserType().equals(UserTypeName.STUDENT)) {
+            member.setUserType(UserTypeName.TEACHER);
+        }
+        else if (member.getUserType().equals(UserTypeName.TEACHER) ) {
+            member.setUserType(UserTypeName.STUDENT);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MemberService that = (MemberService) o;
+        return Objects.equals(memberRepository, that.memberRepository);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(memberRepository);
+    }
 }

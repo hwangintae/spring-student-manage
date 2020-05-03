@@ -13,8 +13,7 @@ public class Subject {
     @Id @GeneratedValue
     private Long id;
 
-    private String year;
-    private String semester;
+    private String yearMonth;
     private String subjectName;
     private String teacherCode;
 

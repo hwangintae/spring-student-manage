@@ -31,4 +31,14 @@ public class MemberRepository {
                 .setParameter("userName", userName)
                 .getResultList();
     }
+
+    public List<Member> findTeacherCodeList() {
+        return em.createQuery("select m from Member m where m.userType = com.intaehwang.springtanz.domain.UserTypeName.TEACHER", Member.class)
+                .getResultList();
+    }
+
+    public List<Member> findStudentList() {
+        return em.createQuery("select m from Member m where m.userType = com.intaehwang.springtanz.domain.UserTypeName.STUDENT", Member.class)
+                .getResultList();
+    }
 }

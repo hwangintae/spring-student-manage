@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<style>
+    .fieldError {
+        border-color: #bd2130;
+    }
+</style>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+    <form role="form" action="/members/teacher/new/{userId}" th:object="${teacherForm}"
+          method="post">
+
+        <div class="form-group">
+            <label for="member" th:for="userId">회원선택</label>
+            <select name="memberId" id="member" th:field="*{userId}" class="form-control">
+                <option value="">회원선택</option>
+                <option th:each="member : ${members}"
+                        th:value="${member.userId}"
+                        th:text="${member.userId}" />
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br/>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+</html>
